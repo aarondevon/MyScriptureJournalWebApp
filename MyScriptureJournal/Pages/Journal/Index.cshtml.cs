@@ -21,20 +21,45 @@ namespace MyScriptureJournal.Pages.Journal
 
         public IList<JournalEntry> JournalEntry { get;set; }
         
+        // Sorting
+        public string BookSort { get; set; }
+        public string DateSort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
+
         // Search functionality
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
-        // Requires using Microsoft.AspNetCore.Mvc.Rendering;
-        //public SelectList Books { get; set; }
-        //[BindProperty(SupportsGet = true)]
-        //public string Book { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SearchSelection { get; set; }
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder)
         {
             var entries = from m in _context.JournalEntry
                           select m;
+            // Sort
+            BookSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            DateSort = sortOrder == "Date" ? "date_desc" : "Date";
 
+            //IQueryable<JournalEntry> studentsIQ = from s in _context.JournalEntry
+            //                                      select s;
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    entries = entries.OrderByDescending(s => s.Book);
+                    break;
+                case "Date":
+                    entries = entries.OrderBy(s => s.EntryDate);
+                    break;
+                case "date_desc":
+                    entries = entries.OrderByDescending(s => s.EntryDate);
+                    break;
+                default:
+                    entries = entries.OrderBy(s => s.Book);
+                    break;
+            }
+
+            // Search
             if (SearchSelection == "Book")
             {
                 if (!string.IsNullOrEmpty(SearchString))
@@ -48,8 +73,9 @@ namespace MyScriptureJournal.Pages.Journal
                 {
                     entries = entries.Where(x => x.Notes.Contains(SearchString));
                 }
-            }                       
-           
+            }
+
+            //JournalEntry = await studentsIQ.AsNoTracking().ToListAsync();
             JournalEntry = await entries.ToListAsync();
         }
     }

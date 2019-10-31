@@ -29,10 +29,14 @@
                 @Html.DisplayNameFor(model => model.JournalEntry[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JournalEntry[0].EntryDate)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">
+                    @Html.DisplayNameFor(model => model.JournalEntry[0].EntryDate)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JournalEntry[0].Book)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.BookSort">
+                    @Html.DisplayNameFor(model => model.JournalEntry[0].Book)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.JournalEntry[0].Reference)
