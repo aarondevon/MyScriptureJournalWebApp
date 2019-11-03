@@ -40,9 +40,6 @@ namespace MyScriptureJournal.Pages.Journal
             BookSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             DateSort = sortOrder == "Date" ? "date_desc" : "Date";
 
-            //IQueryable<JournalEntry> studentsIQ = from s in _context.JournalEntry
-            //                                      select s;
-
             switch (sortOrder)
             {
                 case "name_desc":
@@ -75,7 +72,6 @@ namespace MyScriptureJournal.Pages.Journal
                 }
             }
 
-            //JournalEntry = await studentsIQ.AsNoTracking().ToListAsync();
             JournalEntry = await entries.ToListAsync();
         }
     }
